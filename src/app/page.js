@@ -217,17 +217,61 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
           🚀GAJ JOSHI
         </h1>)
         : (
+ <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "20px",
+    color: "white",
+    textAlign: "center",
+    animation: "fadeIn 1s ease forwards",
+  }}
+>
+  {/* Main Header */}
   <h1
     style={{
       fontSize: "48px",
-      fontWeight: "700",
-      color: "white",
-      textShadow: "0 0 20px rgba(255,255,255,0.6)",
+      fontWeight: "800",
+      textShadow: "0 0 30px rgba(255,255,255,0.6)",
       margin: 0,
     }}
   >
-    This is the next page
+    FrontEnd
   </h1>
+
+  {/* Subsections */}
+  <div
+    style={{
+      display: "flex",
+      gap: "25px",
+      flexWrap: "wrap",
+      justifyContent: "center",
+    }}
+  >
+    {["Next JS", "React JS", "Bootstrap", "Tailwind CSS", "ShadCN"].map(
+      (tech, index) => (
+        <div
+          key={tech}
+          style={{
+            padding: "10px 20px",
+            border: "2px solid rgba(255,255,255,0.5)",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "20px",
+            textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            opacity: 0,
+            transform: "translateY(20px)",
+            animation: `slideUp 0.5s ease forwards ${index * 0.2}s`,
+          }}
+        >
+          {tech}
+        </div>
+      )
+    )}
+  </div>
+</div>
+
 )}
 
         {/* <p
@@ -243,6 +287,29 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
       </div>
      
 <style jsx>{`
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
   @keyframes fadeInGlow {
     0% {
       opacity: 0.1;

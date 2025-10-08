@@ -176,7 +176,7 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
           textAlign: "center",
         }}
       >
-       <h1
+     <h1
   style={{
     fontSize: "64px",
     fontWeight: "900",
@@ -185,11 +185,11 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
     WebkitTextFillColor: "transparent",
     textShadow: "0 0 40px rgba(160,230,255,0.6)",
     margin: "0",
-    opacity: 0.1, // super dim initially
-    filter: "brightness(20%)", // extra dim
-    animation: "fadeInBright 3s ease forwards", // fade-in animation
+    opacity: 0.1,            // start super dim
+    animation: "fadeInGlow 3s ease forwards",
   }}
 >
+
 
           🚀GAJ JOSHI
         </h1>
@@ -205,18 +205,26 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
           Exploring the universe of code ✨
         </p> */}
       </div>
-      <style jsx>{`
-  @keyframes fadeInBright {
+     
+<style jsx>{`
+  @keyframes fadeInGlow {
     0% {
       opacity: 0.1;
-      filter: brightness(20%);
+      text-shadow: 0 0 5px rgba(160, 230, 255, 0.2);
+    }
+    50% {
+      opacity: 0.8;
+      text-shadow: 0 0 60px rgba(160, 230, 255, 0.8);
     }
     100% {
       opacity: 1;
-      filter: brightness(100%);
+      text-shadow: 0 0 80px rgba(160, 230, 255, 1),
+                   0 0 120px rgba(160, 230, 255, 0.6),
+                   0 0 200px rgba(160, 230, 255, 0.3);
     }
   }
 `}</style>
+
 
     </main>
     

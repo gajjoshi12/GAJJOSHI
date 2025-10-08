@@ -2,10 +2,40 @@
 import { useEffect, useRef , useState} from "react";
 import * as THREE from "three";
 import { SiNextdotjs, SiReact, SiBootstrap, SiTailwindcss } from "react-icons/si";
+    function PopUp({ text, position }) {
+  return (
+    <div
+      style={{
+        position: "fixed",       // floats on screen
+        left: position.x,        // X position of mouse
+        top: position.y,         // Y position of mouse
+        transform: "translate(-50%, -100%)",
+        background: "rgba(20, 20, 40, 0.8)",  // dark, semi-transparent
+        border: "1px solid rgba(255,255,255,0.3)",
+        borderRadius: "12px",
+        padding: "12px 16px",
+        color: "#fff",
+        fontSize: "14px",
+        textAlign: "center",
+        pointerEvents: "none",  // so it doesn’t block mouse
+        boxShadow: "0 0 20px rgba(160, 230, 255, 0.5)",
+        backdropFilter: "blur(4px)", // blurry background
+        animation: "fadeInPop 0.3s ease forwards",
+        zIndex: 20,
+      }}
+    >
+      {text}
+    </div>
+  );
+}
+
 
 
 export default function Home() {
   const mountRef = useRef(null);
+  const [hovered, setHovered] = useState(null);    // which tech is hovered
+const [popupPos, setPopupPos] = useState({ x: 0, y: 0 });  // mouse position
+
 const [page, setPage] = useState(0); // 0 = GAJ JOSHI, 1 = Next Page
 const touchStartX = useRef(0);
 const touchEndX = useRef(0);
@@ -18,8 +48,12 @@ const handleTouchEnd = (e) => {
   touchEndX.current = e.changedTouches[0].clientX;
   const deltaX = touchEndX.current - touchStartX.current;
 
-  if (deltaX > 50) setPage(0); // swipe right → GAJ JOSHI
-  else if (deltaX < -50) setPage(1); // swipe left → Next Page
+if (deltaX > 50) {
+  setPage((prev) => Math.max(0, prev - 1)); // swipe right → go back
+} else if (deltaX < -50) {
+  setPage((prev) => Math.min(4, prev + 1)); // swipe left → go forward (max 2 pages now)
+}
+
 };
 
 
@@ -42,6 +76,7 @@ const handleTouchEnd = (e) => {
       5000
     );
     camera.position.z = 800;
+
 
     // --------- Star Texture ----------
     function makeStarTexture(size = 64) {
@@ -200,106 +235,310 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
           textAlign: "center",
         }}
       >
-    {page === 0 ? (
-       <h1
-  style={{
-    fontSize: "64px",
-    fontWeight: "900",
-    background: "linear-gradient(90deg, #fff, #a0e7ff, #7f7fff)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    textShadow: "0 0 40px rgba(160,230,255,0.6)",
-    margin: "0",
-    opacity: 0.1,            // start super dim
-    animation: "fadeInGlow 3s ease forwards",
-  }}
->
-
-
-          🚀GAJ JOSHI
-        </h1>)
-        : (
- <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "20px",
-    color: "white",
-    textAlign: "center",
-    animation: "fadeIn 1s ease forwards",
-  }}
->
-  {/* Main Header */}
+{/* PAGE 0 - Intro */}
+{page === 0 && (
   <h1
     style={{
-      fontSize: "48px",
-      fontWeight: "800",
-      textShadow: "0 0 30px rgba(255,255,255,0.6)",
-      margin: 0,
+      fontSize: "64px",
+      fontWeight: "900",
+      background: "linear-gradient(90deg, #fff, #a0e7ff, #7f7fff)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      textShadow: "0 0 40px rgba(160,230,255,0.6)",
+      margin: "0",
+      opacity: 0.1,
+      animation: "fadeInGlow 3s ease forwards",
     }}
   >
-    FrontEnd
+    🚀GAJ JOSHI
   </h1>
-
-  {/* Subsections */}
-  <div
-    style={{
-      display: "flex",
-      gap: "25px",
-      flexWrap: "wrap",
-      justifyContent: "center",
-    }}
-  >
-  {[
-  { name: "Next JS", icon: <SiNextdotjs size={28} style={{ animation: "float 3s ease-in-out infinite" }} /> },
-  { name: "React JS", icon: <SiReact size={28} style={{ color: "#61DBFB", animation: "spin 8s linear infinite" }} /> },
-  { name: "Bootstrap", icon: <SiBootstrap size={28} style={{ color: "#7952B3", animation: "float 4s ease-in-out infinite" }} /> },
-  { name: "Tailwind CSS", icon: <SiTailwindcss size={28} style={{ color: "#38BDF8", animation: "float 5s ease-in-out infinite" }} /> },
-  { name: "ShadCN", icon: <img src="https://ui.shadcn.com/favicon.ico" alt="ShadCN" style={{ width: "28px", height: "28px", animation: "float 6s ease-in-out infinite" }} /> },
-].map((tech, index) => (
-  <div
-    key={tech.name}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      padding: "12px 20px",
-      border: "2px solid rgba(255,255,255,0.3)",
-      borderRadius: "12px",
-      fontWeight: "600",
-      fontSize: "18px",
-      textShadow: "0 0 10px rgba(255,255,255,0.3)",
-      opacity: 0,
-      transform: "translateY(20px)",
-      animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
-      background: "rgba(255,255,255,0.05)",
-      boxShadow: "0 0 20px rgba(255,255,255,0.2)",
-    }}
-  >
-    {tech.icon} {tech.name}
-  </div>
-))}
-
-
-  </div>
-</div>
-
 )}
 
-        {/* <p
+{/* PAGE 1 - Frontend */}
+{page === 1 && (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "20px",
+      color: "white",
+      textAlign: "center",
+      animation: "fadeIn 1s ease forwards",
+    }}
+  >
+    <h1
+      style={{
+        fontSize: "48px",
+        fontWeight: "800",
+        textShadow: "0 0 30px rgba(255,255,255,0.6)",
+        margin: 0,
+      }}
+    >
+      FrontEnd
+    </h1>
+
+    {/* Tech Buttons */}
+    <div
+      style={{
+        display: "flex",
+        gap: "25px",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
+    >
+      {[
+        { name: "Next JS", icon: <SiNextdotjs size={28} /> },
+        { name: "React JS", icon: <SiReact size={28} style={{ color: "#61DBFB", animation: "spin 8s linear infinite" }} /> },
+        { name: "Bootstrap", icon: <SiBootstrap size={28} style={{ color: "#7952B3" }} /> },
+        { name: "Tailwind CSS", icon: <SiTailwindcss size={28} style={{ color: "#38BDF8" }} /> },
+        { name: "ShadCN", icon: <img src="https://ui.shadcn.com/favicon.ico" alt="ShadCN" style={{ width: "28px", height: "28px" }} /> },
+      ].map((tech, index) => (
+        <div
+          key={tech.name}
+          onMouseEnter={(e) => {
+            setHovered(tech.name);                       // which tech is hovered
+            setPopupPos({ x: e.clientX, y: e.clientY }); // track mouse
+          }}
+          onMouseLeave={() => setHovered(null)}         // hide popup
           style={{
-            fontSize: "28px",
-            marginTop: "20px",
-            color: "rgba(255,255,255,0.9)",
-            textShadow: "0 0 20px rgba(255,255,255,0.3)",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "12px 20px",
+            border: "2px solid rgba(255,255,255,0.3)",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "18px",
+            textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            opacity: 0,
+            transform: "translateY(20px)",
+            animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
+            background: "rgba(255,255,255,0.05)",
+            boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+            cursor: "pointer",
           }}
         >
-          Exploring the universe of code ✨
-        </p> */}
+          {tech.icon} {tech.name}
+        </div>
+      ))}
+    </div>
+
+    {/* Hover Pop-up */}
+    {hovered && (
+      <PopUp
+        text={
+          hovered === "Next JS" ? "Built SSR pages and optimized routes" :
+          hovered === "React JS" ? "Created dynamic components and hooks-based architecture" :
+          hovered === "Bootstrap" ? "Designed responsive layouts and UI grids" :
+          hovered === "Tailwind CSS" ? "Styled components with utility-first approach" :
+          hovered === "ShadCN" ? "Integrated ready UI components with React" :
+          ""
+        }
+        position={popupPos}
+      />
+    )}
+  </div>
+)}
+
+{/* PAGE 2 - Backend */}
+{page === 2 && (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "20px",
+      color: "white",
+      textAlign: "center",
+      animation: "fadeIn 1s ease forwards",
+    }}
+  >
+    <h1
+      style={{
+        fontSize: "48px",
+        fontWeight: "800",
+        textShadow: "0 0 30px rgba(255,255,255,0.6)",
+        margin: 0,
+      }}
+    >
+      BackEnd
+    </h1>
+    <div
+      style={{
+        display: "flex",
+        gap: "25px",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
+    >
+      {[
+        { name: "Django", icon: <img src="https://static.djangoproject.com/img/logos/django-logo-negative.png" alt="Django" style={{ width: "28px", height: "28px" }} /> },
+        { name: "Node.js", icon: <img src="https://nodejs.org/static/images/logo.svg" alt="Node.js" style={{ width: "28px", height: "28px" }} /> },
+        { name: "ASP.NET", icon: <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg" alt="ASP.NET" style={{ width: "28px", height: "28px" }} /> },
+        { name: "Python", icon: <img src="https://www.python.org/static/community_logos/python-logo.png" alt="Python" style={{ width: "28px", height: "28px" }} /> },
+        { name: "SQL", icon: <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Sql_data_base_with_logo.png" alt="SQL" style={{ width: "28px", height: "28px" }} /> },
+      ].map((tech, index) => (
+        <div
+          key={tech.name}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "12px 20px",
+            border: "2px solid rgba(255,255,255,0.3)",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "18px",
+            textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            opacity: 0,
+            transform: "translateY(20px)",
+            animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
+            background: "rgba(255,255,255,0.05)",
+            boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+          }}
+        >
+          {tech.icon} {tech.name}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{/* PAGE 4 - Databases */}
+{page === 3 && (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "20px",
+      color: "white",
+      textAlign: "center",
+      animation: "fadeIn 1s ease forwards",
+    }}
+  >
+    <h1
+      style={{
+        fontSize: "48px",
+        fontWeight: "800",
+        textShadow: "0 0 30px rgba(255,255,255,0.6)",
+        margin: 0,
+      }}
+    >
+      Databases
+    </h1>
+    <div
+      style={{
+        display: "flex",
+        gap: "25px",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
+    >
+      {[
+        { name: "MySQL", icon: <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" alt="MySQL" style={{ width: "28px", height: "28px" }} /> },
+        { name: "PostgreSQL", icon: <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="PostgreSQL" style={{ width: "28px", height: "28px" }} /> },
+        { name: "MongoDB", icon: <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg" alt="MongoDB" style={{ width: "28px", height: "28px" }} /> },
+        { name: "SQLite", icon: <img src="https://www.sqlite.org/images/sqlite370_banner.gif" alt="SQLite" style={{ width: "28px", height: "28px" }} /> },
+        { name: "OracleDB", icon: <img src="https://upload.wikimedia.org/wikipedia/en/6/68/Oracle_SQL_Developer_logo.svg" alt="OracleDB" style={{ width: "28px", height: "28px" }} /> },
+      ].map((db, index) => (
+        <div
+          key={db.name}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "12px 20px",
+            border: "2px solid rgba(255,255,255,0.3)",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "18px",
+            textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            opacity: 0,
+            transform: "translateY(20px)",
+            animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
+            background: "rgba(255,255,255,0.05)",
+            boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+          }}
+        >
+          {db.icon} {db.name}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+{page === 4 && (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "20px",
+      color: "white",
+      textAlign: "center",
+      animation: "fadeIn 1s ease forwards",
+    }}
+  >
+    <h1
+      style={{
+        fontSize: "48px",
+        fontWeight: "800",
+        textShadow: "0 0 30px rgba(255,255,255,0.6)",
+        margin: 0,
+      }}
+    >
+      Game Engines
+    </h1>
+
+    <div
+      style={{
+        display: "flex",
+        gap: "25px",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
+    >
+      {[
+        { name: "Unreal Engine", icon: <img src="./unreal.png" style={{ width: "28px", height: "28px", animation: "float 4s ease-in-out infinite" }} /> },
+        { name: "Unity", icon: <img src="./unity.png" style={{ width: "28px", height: "28px", animation: "float 5s ease-in-out infinite" }} /> },
+      ].map((tech, index) => (
+        <div
+          key={tech.name}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "12px 20px",
+            border: "2px solid rgba(255,255,255,0.3)",
+            borderRadius: "12px",
+            fontWeight: "600",
+            fontSize: "18px",
+            textShadow: "0 0 10px rgba(255,255,255,0.3)",
+            opacity: 0,
+            transform: "translateY(20px)",
+            animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
+            background: "rgba(255,255,255,0.05)",
+            boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+          }}
+        >
+          {tech.icon} {tech.name}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
+
+       
       </div>
      
 <style jsx>{`
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: translate(-50%, -110%) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+}
+
 
 @keyframes fadeIn {
   0% {

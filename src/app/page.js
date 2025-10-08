@@ -69,8 +69,9 @@ export default function Home() {
       return new THREE.Points(geo, mat);
     }
 
-    const starsNear = createStarfield(5000, 1500, 10);
-    const starsFar = createStarfield(10000, 3000, 4);
+const starsNear = createStarfield(2000, 1500, 10); // fewer near stars
+const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
+
     scene.add(starsNear);
     scene.add(starsFar);
 
@@ -175,17 +176,21 @@ export default function Home() {
           textAlign: "center",
         }}
       >
-        <h1
-          style={{
-            fontSize: "64px",
-            fontWeight: "900",
-            background: "linear-gradient(90deg, #fff, #a0e7ff, #7f7fff)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textShadow: "0 0 40px rgba(160,230,255,0.6)",
-            margin: "0",
-          }}
-        >
+       <h1
+  style={{
+    fontSize: "64px",
+    fontWeight: "900",
+    background: "linear-gradient(90deg, #fff, #a0e7ff, #7f7fff)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    textShadow: "0 0 40px rgba(160,230,255,0.6)",
+    margin: "0",
+    opacity: 0.1, // super dim initially
+    filter: "brightness(20%)", // extra dim
+    animation: "fadeInBright 3s ease forwards", // fade-in animation
+  }}
+>
+
           🚀GAJ JOSHI
         </h1>
 
@@ -200,6 +205,20 @@ export default function Home() {
           Exploring the universe of code ✨
         </p> */}
       </div>
+      <style jsx>{`
+  @keyframes fadeInBright {
+    0% {
+      opacity: 0.1;
+      filter: brightness(20%);
+    }
+    100% {
+      opacity: 1;
+      filter: brightness(100%);
+    }
+  }
+`}</style>
+
     </main>
+    
   );
 }

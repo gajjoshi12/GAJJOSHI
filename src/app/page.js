@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef , useState} from "react";
 import * as THREE from "three";
+import { SiNextdotjs, SiReact, SiBootstrap, SiTailwindcss } from "react-icons/si";
+
 
 export default function Home() {
   const mountRef = useRef(null);
@@ -249,26 +251,37 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
       justifyContent: "center",
     }}
   >
-    {["Next JS", "React JS", "Bootstrap", "Tailwind CSS", "ShadCN"].map(
-      (tech, index) => (
-        <div
-          key={tech}
-          style={{
-            padding: "10px 20px",
-            border: "2px solid rgba(255,255,255,0.5)",
-            borderRadius: "12px",
-            fontWeight: "600",
-            fontSize: "20px",
-            textShadow: "0 0 10px rgba(255,255,255,0.3)",
-            opacity: 0,
-            transform: "translateY(20px)",
-            animation: `slideUp 0.5s ease forwards ${index * 0.2}s`,
-          }}
-        >
-          {tech}
-        </div>
-      )
-    )}
+  {[
+  { name: "Next JS", icon: <SiNextdotjs size={28} style={{ animation: "float 3s ease-in-out infinite" }} /> },
+  { name: "React JS", icon: <SiReact size={28} style={{ color: "#61DBFB", animation: "spin 8s linear infinite" }} /> },
+  { name: "Bootstrap", icon: <SiBootstrap size={28} style={{ color: "#7952B3", animation: "float 4s ease-in-out infinite" }} /> },
+  { name: "Tailwind CSS", icon: <SiTailwindcss size={28} style={{ color: "#38BDF8", animation: "float 5s ease-in-out infinite" }} /> },
+  { name: "ShadCN", icon: <img src="https://ui.shadcn.com/favicon.ico" alt="ShadCN" style={{ width: "28px", height: "28px", animation: "float 6s ease-in-out infinite" }} /> },
+].map((tech, index) => (
+  <div
+    key={tech.name}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      padding: "12px 20px",
+      border: "2px solid rgba(255,255,255,0.3)",
+      borderRadius: "12px",
+      fontWeight: "600",
+      fontSize: "18px",
+      textShadow: "0 0 10px rgba(255,255,255,0.3)",
+      opacity: 0,
+      transform: "translateY(20px)",
+      animation: `slideUp 0.6s ease forwards ${index * 0.3}s`,
+      background: "rgba(255,255,255,0.05)",
+      boxShadow: "0 0 20px rgba(255,255,255,0.2)",
+    }}
+  >
+    {tech.icon} {tech.name}
+  </div>
+))}
+
+
   </div>
 </div>
 

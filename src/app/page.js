@@ -1,9 +1,26 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef , useState} from "react";
 import * as THREE from "three";
 
 export default function Home() {
   const mountRef = useRef(null);
+const [page, setPage] = useState(0); // 0 = GAJ JOSHI, 1 = Next Page
+const touchStartX = useRef(0);
+const touchEndX = useRef(0);
+
+const handleTouchStart = (e) => {
+  touchStartX.current = e.touches[0].clientX;
+};
+
+const handleTouchEnd = (e) => {
+  touchEndX.current = e.changedTouches[0].clientX;
+  const deltaX = touchEndX.current - touchStartX.current;
+
+  if (deltaX > 50) setPage(0); // swipe right → GAJ JOSHI
+  else if (deltaX < -50) setPage(1); // swipe left → Next Page
+};
+
+
 
   useEffect(() => {
     if (!mountRef.current) return; // ✅ avoid null errors
@@ -149,6 +166,7 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
     };
     animate();
 
+
     // Cleanup
     return () => {
       if (mountRef.current && renderer.domElement) {
@@ -159,7 +177,11 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
   }, []);
 
   return (
-    <main>
+<main
+  onTouchStart={handleTouchStart}
+  onTouchEnd={handleTouchEnd}
+  style={{ overflow: "hidden" }}
+>
       {/* Background Canvas */}
       <div ref={mountRef} style={{ position: "fixed", inset: 0, zIndex: -1 }} />
 
@@ -176,7 +198,8 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
           textAlign: "center",
         }}
       >
-     <h1
+    {page === 0 ? (
+       <h1
   style={{
     fontSize: "64px",
     fontWeight: "900",
@@ -192,7 +215,20 @@ const starsFar = createStarfield(4000, 3000, 4);   // fewer far stars
 
 
           🚀GAJ JOSHI
-        </h1>
+        </h1>)
+        : (
+  <h1
+    style={{
+      fontSize: "48px",
+      fontWeight: "700",
+      color: "white",
+      textShadow: "0 0 20px rgba(255,255,255,0.6)",
+      margin: 0,
+    }}
+  >
+    This is the next page
+  </h1>
+)}
 
         {/* <p
           style={{
